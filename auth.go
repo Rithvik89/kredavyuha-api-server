@@ -168,6 +168,17 @@ func (app *App) Logout(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// For example, clearing the session or revoking the token
-	w.Write([]byte("Logged out successfully"))
+
+	type respMssge struct {
+		Message string `json:"message"`
+	}
+
+	response := respMssge{Message: "Logged out successfully"}
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonResponse)
 }
